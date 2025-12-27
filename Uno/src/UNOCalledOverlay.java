@@ -3,7 +3,7 @@ import java.awt.*;
 public class UNOCalledOverlay extends PlayerFlashOverlay {
     //sets up the overlay ready to show
     public UNOCalledOverlay(Position position) {
-        super(position, "UNO!", Color.RED, 40);
+        super(position, "UNO!", Theme.ACCENT, 40);
         setEnabled(false);
     }
 
@@ -11,7 +11,7 @@ public class UNOCalledOverlay extends PlayerFlashOverlay {
     @Override
     public void paint(Graphics g) {
         if(displayTimer % 200 < 150) {
-            g.setColor(Color.BLACK);
+            g.setColor(Theme.TEXT);
             g.setFont(new Font("Arial", Font.BOLD, fontSize));
             g.drawString(message, bounds.position.x, bounds.position.y);
             g.setFont(new Font("Arial", Font.BOLD, fontSize));

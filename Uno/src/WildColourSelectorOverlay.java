@@ -47,7 +47,7 @@ public class WildColourSelectorOverlay extends WndInterface implements TurnDecis
      * @param g Reference to the Graphics object for rendering.
      */
     public void paint(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.PANEL);
         g.fillRect(bounds.position.x-20, bounds.position.y-40, bounds.width+40, bounds.height+60);
         // Red, blue, green, yellow segments for any wild card in the middle.
         for(int i = 0; i < 4; i++) {
@@ -62,11 +62,12 @@ public class WildColourSelectorOverlay extends WndInterface implements TurnDecis
                         270 + 90 * i, 90);
             }
         }
-        g.setColor(Color.WHITE);
+        g.setColor(Theme.BUTTON_TEXT);
         g.drawRect(bounds.position.x-20, bounds.position.y-40, bounds.width+40, bounds.height+60);
         g.setFont(new Font("Arial", Font.BOLD, 20));
         String message = "Choose Colour";
         int strWidth = g.getFontMetrics().stringWidth(message);
+        g.setColor(Theme.TEXT);
         g.drawString(message, bounds.position.x+bounds.width/2-strWidth/2, bounds.position.y-5);
     }
 

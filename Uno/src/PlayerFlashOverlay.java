@@ -73,7 +73,7 @@ public class PlayerFlashOverlay extends WndInterface implements GeneralOverlayIn
     @Override
     public void paint(Graphics g) {
         if(displayTimer % 200 < 150) {
-            g.setColor(Color.BLACK);
+            g.setColor(Theme.TEXT);
             g.setFont(new Font("Arial", Font.BOLD, fontSize));
             int strWidth = g.getFontMetrics().stringWidth(message);
             g.drawString(message, bounds.position.x - strWidth / 2 - 2, bounds.position.y - 2);

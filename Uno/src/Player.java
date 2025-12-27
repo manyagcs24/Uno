@@ -63,12 +63,12 @@ public class Player {
         }
         g.setFont(new Font("Arial", Font.BOLD, 20));
         int strWidth = g.getFontMetrics().stringWidth(playerName);
-        g.setColor(new Color(1,1,1, 204));
+        g.setColor(Theme.TRANSLUCENT_TEXT);
         int nameXOffset = bounds.position.x + (showPlayerNameLeft ? -(strWidth-50) : (bounds.width/2-(strWidth+30)/2));
         int nameYOffset = bounds.position.y + (showPlayerNameLeft ? (bounds.height/2-20) : -10);
         g.fillRect(nameXOffset, nameYOffset, strWidth+30, 40);
         g.setColor(CurrentGameInterface.getCurrentGame().getCurrentPlayer().getPlayerID() == getPlayerID()
-                ? Color.ORANGE : Color.WHITE);
+            ? Theme.ACCENT : Theme.BUTTON_TEXT);
         g.drawString(playerName, nameXOffset+15, nameYOffset+25);
     }
 

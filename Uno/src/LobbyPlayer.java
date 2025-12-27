@@ -162,12 +162,12 @@ public class LobbyPlayer extends Rectangle {
         if(!isEnabled) return;
 
         if(isHovered) {
-            g.setColor(new Color(115, 156, 58, 204));
+            g.setColor(Theme.PANEL_TRANSPARENT);
         } else {
-            g.setColor(new Color(118, 94, 57, 204));
+            g.setColor(Theme.PANEL);
         }
         g.fillRect(position.x, position.y, width, height);
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.TEXT);
         g.drawRect(position.x, position.y, width, height);
 
         g.setFont(new Font("Arial", Font.BOLD, 20));

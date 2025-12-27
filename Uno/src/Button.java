@@ -18,8 +18,8 @@ public class Button extends Rectangle {
     // Draw the button (changes color if hovered)
     public void paint(Graphics g) {
         // Background color
-        if(isHovered) g.setColor(new Color(63, 78, 123));
-        else g.setColor(new Color(123, 133, 163));
+        if(isHovered) g.setColor(Theme.BUTTON_HOVER);
+        else g.setColor(Theme.BUTTON_BG);
 
         g.fillRect(position.x - (isHovered ? 3 : 0), 
                    position.y - (isHovered ? 3 : 0), 
@@ -27,7 +27,7 @@ public class Button extends Rectangle {
                    height + (isHovered ? 6 : 0));
 
         // Border color
-        g.setColor(isHovered ? Color.WHITE : Color.BLACK);
+        g.setColor(isHovered ? Theme.BUTTON_TEXT : Theme.TEXT);
         g.drawRect(position.x - (isHovered ? 3 : 0), 
                    position.y - (isHovered ? 3 : 0), 
                    width + (isHovered ? 6 : 0), 
@@ -36,6 +36,7 @@ public class Button extends Rectangle {
         // Text
         g.setFont(new Font("Arial", Font.BOLD, 20));
         int strWidth = g.getFontMetrics().stringWidth(text);
+        g.setColor(isHovered ? Theme.BUTTON_TEXT : Theme.TEXT);
         g.drawString(text, position.x + width/2 - strWidth/2, position.y + height/2 + 8);
     }
 

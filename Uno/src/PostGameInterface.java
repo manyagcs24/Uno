@@ -116,7 +116,7 @@ public class PostGameInterface extends WndInterface {
     public void paint(Graphics g) {
         drawBackground(g);
         gamePanel.paintUnoTitle(g, bounds);
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.TEXT);
         g.setFont(new Font("Arial", Font.BOLD, 40));
         int strWidth = g.getFontMetrics().stringWidth("Post-Game Summary");
         g.drawString("Post-Game Summary", bounds.width/2-strWidth/2, 120);
@@ -131,9 +131,9 @@ public class PostGameInterface extends WndInterface {
      * @param g Reference to the Graphics object for rendering.
      */
     private void drawBackground(Graphics g) {
-        g.setColor(new Color(205, 138, 78, 128));
+        g.setColor(Theme.PANEL_TRANSPARENT);
         g.fillRect(bounds.width/4, 80, bounds.width/2, 500);
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.TEXT);
         g.drawRect(bounds.width/4, 80, bounds.width/2, 500);
     }
 

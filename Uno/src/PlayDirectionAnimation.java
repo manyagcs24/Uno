@@ -70,7 +70,7 @@ public class PlayDirectionAnimation {
      * @param g Reference to the Graphics object for rendering.
      */
     public void paint(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.ACCENT_DARK);
         g.fillOval(movingObject1.x, movingObject1.y, indicatorSize, indicatorSize);
         g.fillOval(movingObject2.x, movingObject2.y, indicatorSize, indicatorSize);
     }

@@ -40,9 +40,9 @@ public class ChallengeSuccessOverlay extends WndInterface implements GeneralOver
     @Override
     public void paint(Graphics g) {
         if(displayTimer % 200 < 150) {
-            g.setColor(new Color(106, 163, 22));
+            g.setColor(Theme.SUCCESS);
             g.fillPolygon(polyXCoords, polyYCoords, polyXCoords.length);
-            g.setColor(Color.BLACK);
+            g.setColor(Theme.TEXT);
             g.drawPolygon(polyXCoords, polyYCoords, polyXCoords.length);
         }
     }

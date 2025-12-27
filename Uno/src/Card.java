@@ -49,8 +49,8 @@ public class Card extends Rectangle {
         g.fillRect(position.x+2, position.y+2, width-4, height-4);
 
         if(colourID != 4) {
-            // Draw a white oval for any non-wild in the middle.
-            g.setColor(Color.WHITE);
+                // Draw a white oval for any non-wild in the middle.
+                g.setColor(Color.WHITE);
             g.fillOval(position.x + 4, position.y + height / 2 - ((width - 8) / 4),
                     width - 8, (width - 8) / 2);
         } else {
@@ -67,15 +67,15 @@ public class Card extends Rectangle {
         int strWidth = g.getFontMetrics().stringWidth(cardLabel);
         // Draw shadow (black) text for central label
         if(colourID == 4 || cardLabel.length() <= 4) {
-            g.setColor(Color.BLACK);
+            g.setColor(Theme.TEXT);
             g.drawString(cardLabel, position.x+width/2-strWidth/2-1,
-                    position.y+height/2+fontHeight/2+1);
+                position.y+height/2+fontHeight/2+1);
         }
         // Colour to make primary text visible based on whether a shadow was added.
         if(colourID == 4) {
             g.setColor(Color.WHITE);
         } else {
-            g.setColor(cardLabel.length()<=4 ? drawColour : Color.BLACK);
+            g.setColor(cardLabel.length()<=4 ? drawColour : Theme.TEXT);
         }
         // Draw central label
         g.drawString(cardLabel, position.x+width/2-strWidth/2,
@@ -94,17 +94,17 @@ public class Card extends Rectangle {
     public static void paintCardBack(Graphics g, Rectangle bounds) {
         g.setColor(Color.WHITE);
         g.fillRect(bounds.position.x, bounds.position.y, bounds.width, bounds.height);
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.TEXT);
         g.fillRect(bounds.position.x+2, bounds.position.y+2, bounds.width-4, bounds.height-4);
-        g.setColor(new Color(147, 44, 44));
+        g.setColor(Theme.ACCENT_DARK);
         g.fillOval(bounds.position.x+4, bounds.position.y+bounds.height/2-((bounds.width-8)/4),
-                bounds.width-8, (bounds.width-8)/2);
-        g.setColor(Color.BLACK);
+            bounds.width-8, (bounds.width-8)/2);
+        g.setColor(Theme.TEXT);
         g.setFont(new Font("Arial", Font.BOLD, 20));
         int strWidth = g.getFontMetrics().stringWidth("UNO");
         g.drawString("UNO", bounds.position.x+bounds.width/2-strWidth/2-2,
                 bounds.position.y+bounds.height/2-((bounds.width-8)/4)+2+20);
-        g.setColor(new Color(226, 173, 67));
+        g.setColor(Theme.ACCENT);
         g.drawString("UNO", bounds.position.x+bounds.width/2-strWidth/2,
                 bounds.position.y+bounds.height/2-((bounds.width-8)/4)+20);
     }
@@ -130,11 +130,11 @@ public class Card extends Rectangle {
     // Map colour ID to drawing colour
     public static Color getColourByID(int colourID) {
         return switch (colourID) {
-            case 0 -> new Color(191, 48, 48);  //red
-            case 1 -> new Color(36, 94, 160);   //blue
-            case 2 -> new Color(115, 187, 54);  //green
-            case 3 -> new Color(238, 188, 65);   //yellow
-            default -> Color.BLACK;  //wild/default
+            case 0 -> Theme.CARD_RED;  //red
+            case 1 -> Theme.CARD_BLUE;   //blue
+            case 2 -> Theme.CARD_GREEN;  //green
+            case 3 -> Theme.CARD_YELLOW;   //yellow
+            default -> Theme.TEXT;  //wild/default
         };
     }
 

@@ -39,17 +39,17 @@ public class UnoButton extends WndInterface implements GeneralOverlayInterface {
         if(!isActive) return;
 
         drawButtonBackground(g);
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.TEXT);
         g.setFont(new Font("Arial", Font.BOLD, 30));
         int strWidth = g.getFontMetrics().stringWidth("UNO");
         g.drawString("UNO", bounds.position.x+bounds.width/2-strWidth/2-2, bounds.position.y+bounds.height/2+12);
-        g.setColor(new Color(226, 173, 67));
+        g.setColor(Theme.ACCENT);
         g.drawString("UNO", bounds.position.x+bounds.width/2-strWidth/2, bounds.position.y+bounds.height/2+10);
     }
 
     // Draws background with hover effect
     protected void drawButtonBackground(Graphics g) {
-        g.setColor(new Color(147, 44, 44));
+        g.setColor(Theme.ACCENT_DARK);
         int expandAmount = isHovered ? 20 : 0;
         g.fillOval(bounds.position.x-expandAmount/2, bounds.position.y-expandAmount/2,
                 bounds.width+expandAmount, bounds.height+expandAmount);

@@ -135,10 +135,10 @@ public class LobbyInterface extends WndInterface {
      * @param g Reference to the Graphics object for rendering.
      */
     private void drawBackground(Graphics g) {
-        g.setColor(new Color(205, 138, 78, 128));
+        g.setColor(Theme.PANEL_TRANSPARENT);
         g.fillRect(10, 80, bounds.width/2+20, 500);
         g.fillRect(bounds.width/2+40, 80, bounds.width/2-60, 500);
-        g.setColor(Color.BLACK);
+        g.setColor(Theme.TEXT);
         g.drawRect(10, 80, bounds.width/2+20, 500);
         g.drawRect(bounds.width/2+40, 80, bounds.width/2-60, 500);
     }

@@ -14,7 +14,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     // constructor, sets up panel and starts timer
     public GamePanel() {
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        setBackground(new Color(93, 141, 74));
+        setBackground(Theme.BACKGROUND);
 
         pauseWnd = new PauseInterface(new Rectangle(PANEL_WIDTH/2-100,PANEL_HEIGHT/2-100,200,200), this);
         pauseWnd.setEnabled(false);
@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         if(activeInterface != null) activeInterface.paint(g);
         if(pauseWnd.isEnabled()) pauseWnd.paint(g);
         if(DEBUG_MODE) {
-            g.setColor(Color.BLACK);
+            g.setColor(Theme.TEXT);
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.drawString("DEBUG ON", 10,20);
         }
