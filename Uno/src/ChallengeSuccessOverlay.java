@@ -1,33 +1,12 @@
 import java.awt.*;
 
-/**
- * Uno
- *
- * ChallengeSuccessOverlay class:
- * Displays a short time flashing tick to show the challenge was successful.
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
+// Overlay showing a short flashing tick for a successful challenge
 public class ChallengeSuccessOverlay extends WndInterface implements GeneralOverlayInterface {
-    /**
-     * Timer till the overlay is hidden again.
-     */
-    private double displayTimer;
-    /**
-     * X Coordinates to make the graphic appear.
-     */
-    private final int[] polyXCoords;
-    /**
-     * Y Coordinates to make the graphic appear.
-     */
-    private final int[] polyYCoords;
+    private double displayTimer; // Timer until overlay hides
+    private final int[] polyXCoords; // X coords for tick graphic
+    private final int[] polyYCoords; // Y coords for tick graphic
 
-    /**
-     * Initialise the interface with bounds and makes it ready to be enabled.
-     *
-     * @param bounds Region where the object is shown.
-     */
+    // Constructor sets bounds and prepares graphic coords
     public ChallengeSuccessOverlay(Rectangle bounds) {
         super(bounds);
         setEnabled(false);
@@ -37,46 +16,34 @@ public class ChallengeSuccessOverlay extends WndInterface implements GeneralOver
         int y = bounds.position.y;
         int heightDiv6 = bounds.height / 6;
 
-        polyXCoords = new int[] { x, x+widthDiv6, x+widthDiv6 * 2,
-                x+widthDiv6*5, x+bounds.width, x+widthDiv6 * 2};
-        polyYCoords = new int[] { y + heightDiv6 * 4, y + heightDiv6 * 3, y+heightDiv6*4,
+        polyXCoords = new int[] { x, x+widthDiv6, x+widthDiv6*2,
+                x+widthDiv6*5, x+bounds.width, x+widthDiv6*2};
+        polyYCoords = new int[] { y+heightDiv6*4, y+heightDiv6*3, y+heightDiv6*4,
                 y+heightDiv6*2, y+heightDiv6*3, y+bounds.height};
     }
 
-    /**
-     * Shows the overlay and sets a timer for how long it will appear.
-     */
+    // Show overlay and start timer
     @Override
     public void showOverlay() {
         setEnabled(true);
         displayTimer = 2000;
     }
 
-    /**
-     * Updates the timer to hide the overlay and hides it when it hits 0.
-     *
-     * @param deltaTime Time since last update.
-     */
+    // Update timer and hide overlay if done
     @Override
     public void update(int deltaTime) {
         displayTimer -= deltaTime;
-        if(displayTimer <= 0) {
-            setEnabled(false);
-        }
+        if(displayTimer <= 0) setEnabled(false);
     }
 
-    /**
-     * Draws the tick flashing with showing 75% of the time.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    // Draw the tick (flashes 75% of the time)
     @Override
     public void paint(Graphics g) {
         if(displayTimer % 200 < 150) {
             g.setColor(new Color(106, 163, 22));
-            g.fillPolygon(polyXCoords,polyYCoords,polyXCoords.length);
+            g.fillPolygon(polyXCoords, polyYCoords, polyXCoords.length);
             g.setColor(Color.BLACK);
-            g.drawPolygon(polyXCoords,polyYCoords,polyXCoords.length);
+            g.drawPolygon(polyXCoords, polyYCoords, polyXCoords.length);
         }
     }
 }

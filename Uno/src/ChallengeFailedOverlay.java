@@ -1,33 +1,12 @@
 import java.awt.*;
 
-/**
- * Uno
- *
- * ChallengeSuccessOverlay class:
- * Displays a short time flashing cross to show the challenge was failed.
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
+// Overlay showing a red cross when a challenge fails
 public class ChallengeFailedOverlay extends WndInterface implements GeneralOverlayInterface {
-    /**
-     * Timer till the overlay is hidden again.
-     */
-    private double displayTimer;
-    /**
-     * X Coordinates to make the graphic appear.
-     */
-    private final int[] polyXCoords;
-    /**
-     * Y Coordinates to make the graphic appear.
-     */
-    private final int[] polyYCoords;
+    private double displayTimer; // time to show overlay
+    private final int[] polyXCoords; // X coordinates of cross
+    private final int[] polyYCoords; // Y coordinates of cross
 
-    /**
-     * Initialise the interface with bounds and makes it ready to be enabled.
-     *
-     * @param bounds Region where the object is shown.
-     */
+    // constructor, sets up cross shape and disables initially
     public ChallengeFailedOverlay(Rectangle bounds) {
         super(bounds);
         setEnabled(false);
@@ -43,40 +22,28 @@ public class ChallengeFailedOverlay extends WndInterface implements GeneralOverl
                 y+6*sValY,y+7*sValY,y+5*sValY,y+7*sValY,y+6*sValY,y+4*sValY};
     }
 
-    /**
-     * Shows the overlay and sets a timer for how long it will appear.
-     */
+    // show overlay and reset timer
     @Override
     public void showOverlay() {
         setEnabled(true);
-        displayTimer = 2000;
+        displayTimer = 2000; // show for 2 seconds
     }
 
-    /**
-     * Updates the timer to hide the overlay and hides it when it hits 0.
-     *
-     * @param deltaTime Time since last update.
-     */
+    // update timer and hide overlay when expired
     @Override
     public void update(int deltaTime) {
         displayTimer -= deltaTime;
-        if(displayTimer <= 0) {
-            setEnabled(false);
-        }
+        if(displayTimer <= 0) setEnabled(false);
     }
 
-    /**
-     * Draws the tick flashing with showing 75% of the time.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    // draw flashing red cross
     @Override
     public void paint(Graphics g) {
-        if(displayTimer % 200 < 150) {
+        if(displayTimer % 200 < 150) { // visible 75% of the time
             g.setColor(new Color(179, 50, 38));
-            g.fillPolygon(polyXCoords,polyYCoords,polyXCoords.length);
+            g.fillPolygon(polyXCoords, polyYCoords, polyXCoords.length);
             g.setColor(Color.BLACK);
-            g.drawPolygon(polyXCoords,polyYCoords,polyXCoords.length);
+            g.drawPolygon(polyXCoords, polyYCoords, polyXCoords.length);
         }
     }
 }

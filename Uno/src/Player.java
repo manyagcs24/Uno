@@ -3,91 +3,39 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Uno
- *
- * Player class:
- * Defines a player with all the information about a single player.
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
+//represents player in a game
 public class Player {
-    /**
-     * Types of players include:
-     * ThisPlayer: Only one allowed, this is the player who is playing this game.
-     * AIPlayer: Controlled by an AI (should be using an AIPlayer class).
-     */
+    //player type
     public enum PlayerType { ThisPlayer, AIPlayer}
 
-    /**
-     * Safe indicates the player is not vulnerable to counter calls.
-     * Called indicates the Player called before ending their turn with a card.
-     * NotSafe indicates that players can counter call the player's uno and make them draw cards.
-     */
+    //uno safety state
     public enum UNOState { Safe, Called, NotSafe }
 
-    /**
-     * The unique ID for this player.
-     */
-    private final int playerID;
-    /**
-     * The name for this player.
-     */
-    private final String playerName;
-    /**
-     * The type of player. (ThisPlayer, AIPlayer, or NetworkPlayer).
-     */
-    private final PlayerType playerType;
-    /**
-     * The region for drawing the player's cards.
-     */
-    private final Rectangle bounds;
+    //player identity
+    private final int playerID;   
+    private final String playerName; 
+    private final PlayerType playerType;  
 
-    /**
-     * The collection of cards contained in the player's hand.
-     */
-    private final List<Card> hand;
-    /**
-     * The card that the player is currently hovering their mouse over.
-     */
-    private Card hoveredCard;
-    /**
-     * When true the cards for this player are revealed face-up.
-     */
-    private boolean showCards;
-    /**
-     * The total score between multiple rounds for this player.
-     */
-    private int totalScore;
-    /**
-     * The score for a single round for this player.
-     */
-    private int currentRoundScore;
-    /**
-     * When true this player won the current round.
-     * Necessary to store this because a score could be 0 is all other players only have 0s in their hands.
-     */
+    //area where cards are drawn
+    private final Rectangle bounds;
+    
+    //players hand
+    private final List<Card> hand;   //collection of cards in players hands as array
+    private Card hoveredCard;      //The card that the player is currently hovering their mouse over.
+    private boolean showCards;    //When true the cards for this player are revealed face-up.
+  
+    //scoring
+    private int totalScore;   
+    private int currentRoundScore;   
     private boolean wonRound;
-    /**
-     * When true, the player's name is centred to the left side of the bounds, otherwise it is centred on the top.
-     */
+    
+    // Name display position
     private final boolean showPlayerNameLeft;
-    /**
-     * The current UNOState that can be Safe, Called, or NotSafe.
-     */
+    
+    // Current UNO state
     private UNOState unoState;
 
-    /**
-     * Initialises the player with an empty hand and defaults to showing cards if
-     * the player is defined with the type ThisPlayer.
-     *
-     * @param playerID The unique ID for this player.
-     * @param playerName The name for this player.
-     * @param playerType The type of player. (ThisPlayer, AIPlayer, or NetworkPlayer).
-     * @param bounds The region for drawing the player's cards.
-     * @param showPlayerNameLeft When true, the player's name is centred to the left side of the bounds, otherwise it is centred on the top.
-     */
+    // Create a player with empty hand
     public Player(int playerID, String playerName, PlayerType playerType, Rectangle bounds, boolean showPlayerNameLeft) {
         this.playerName = playerName;
         this.playerID = playerID;
@@ -101,20 +49,12 @@ public class Player {
         unoState = UNOState.Safe;
     }
 
-    /**
-     * Does nothing.
-     *
-     * @param deltaTime Time since last update.
-     */
+    // Update player (unused)
     public void update(int deltaTime) {
 
     }
 
-    /**
-     * Draws the player's cards with either card backs or fronts. Then draws the player's name nearby.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    // Draw cards and player name
     public void paint(Graphics g) {
         if(showCards) {
             hand.forEach(card -> card.paint(g));
@@ -132,59 +72,31 @@ public class Player {
         g.drawString(playerName, nameXOffset+15, nameYOffset+25);
     }
 
-    /**
-     * Adds the card to the hand and recalculates the positions where all cards should be positioned.
-     *
-     * @param card The card to add to the hand.
-     */
+    // Add a card and reposition hand
     public void addCardToHand(Card card) {
         hand.add(card);
         recalculateCardPositions();
     }
 
-    /**
-     * Empties the hand.
-     */
-    public void emptyHand() {
+  
+    public void emptyHand() {   //empties the hand
         hand.clear();
     }
 
-    /**
-     * Changes the visibility of the Player's cards.
-     *
-     * @param reveal True makes the card fronts show, false makes card backs show.
-     */
-    public void revealHand(boolean reveal) {
+    // Show or hide cards
+    public void revealHand(boolean reveal) {   
         showCards = reveal;
     }
 
-    /**
-     * Gets the type of Player.
-     *
-     * @return The type of player.
-     */
     public PlayerType getPlayerType() {
         return playerType;
     }
 
-    /**
-     * Gets the unique player ID.
-     *
-     * @return The unique playerID.
-     */
     public int getPlayerID() {
         return playerID;
     }
 
-    /**
-     * Takes in a possible faceValue and colourValue that would normally be the
-     * top of pile colours. And checks every card in the hand to find a list
-     * of all cards that can be played and returns it.
-     *
-     * @param curFaceValue The faceValue to check against.
-     * @param curColourValue The colourID to check against.
-     * @return A list of cards that are valid to be played in this context.
-     */
+    // Get playable cards for current pile
     public List<Card> getValidMoves(int curFaceValue, int curColourValue) {
         List<Card> result = new ArrayList<>();
         for(Card card : hand) {
@@ -196,10 +108,7 @@ public class Player {
         return result;
     }
 
-    /**
-     * Sorts the hand and recalculates the positions of all cards.
-     * Cards are sorted first by colour and then by face values.
-     */
+    // Sort cards by colour then face value
     public void sortHand() {
         Comparator<Card> compareByCard = Comparator
                 .comparing(Card::getColourID)
@@ -208,12 +117,7 @@ public class Player {
         recalculateCardPositions();
     }
 
-    /**
-     * Updates the hover to check which card is hovered and then updates the
-     * positions of all cards to offset based on hovering.
-     *
-     * @param mousePosition Position of the mouse cursor.
-     */
+    // Update hovered card
     public void updateHover(Position mousePosition) {
         if(hoveredCard != null && !hoveredCard.isPositionInside(mousePosition)) {
             hoveredCard = null;
@@ -227,22 +131,13 @@ public class Player {
         recalculateCardPositions();
     }
 
-    /**
-     * Removes the card from the hand and recalculates position of all cards.
-     *
-     * @param card Card to be removed.
-     */
+    // Remove a card from hand
     public void removeCard(Card card) {
         hand.remove(card);
         recalculateCardPositions();
     }
 
-    /**
-     * Searches to find the cardID.
-     *
-     * @param cardID cardID to search for.
-     * @return The Card with cardID or null.
-     */
+    // Find card by ID
     public Card getCardByID(int cardID) {
         for(Card card : hand) {
             if(card.getCardID() == cardID) {
@@ -343,53 +238,30 @@ public class Player {
         }
     }
 
-    /**
-     * Sets the currentRoundScore and increases the totalScore by this amount.
-     *
-     * @param newCurrentRoundScore New score for this player.
-     */
+    // Update round score and total score
     public void setCurrentRoundScore(int newCurrentRoundScore) {
         this.currentRoundScore = newCurrentRoundScore;
         totalScore += currentRoundScore;
     }
 
-    /**
-     * Sets the won state to true.
-     */
+    // Mark player as winner
     public void setWon() {
         wonRound = true;
     }
 
-    /**
-     * This returns true when this player has won.
-     *
-     * @return The current won state.
-     */
     public boolean getWon() {
         return wonRound;
     }
 
-    /**
-     * The total score between multiple rounds.
-     *
-     * @return The current total score for this player.
-     */
     public int getTotalScore() {
         return totalScore;
     }
 
-    /**
-     * Gets the current round score for this player.
-     *
-     * @return The current score for this player for the current round.
-     */
     public int getCurrentRoundScore() {
         return currentRoundScore;
     }
 
-    /**
-     * Resets the score back to nothing.
-     */
+    // Reset all scores and UNO state
     public void resetScore() {
         totalScore = 0;
         currentRoundScore = 0;
@@ -397,14 +269,7 @@ public class Player {
         unoState = UNOState.Safe;
     }
 
-    /**
-     * Can transition from Safe->Called (NotSafe->Called should not occur).
-     * Can transition from Safe->NotSafe, NotSafe->Safe, and Called->Safe.
-     * Will ignore attempt to transition from Called->NotSafe. This behaviour
-     * handles the ignoring of a transition to NotSafe when the turn ends.
-     *
-     * @param unoState The new state to set.
-     */
+    // Update UNO state with valid transitions
     public void setUnoState(UNOState unoState) {
         if(this.unoState == UNOState.Called && unoState == UNOState.NotSafe) {
             return;
@@ -412,20 +277,11 @@ public class Player {
         this.unoState = unoState;
     }
 
-    /**
-     * Checks the current unoState for this player to verify if they are safe from being called.
-     *
-     * @return True if the UNOState is Safe or Called, and false if UNOState is
-     */
+    //check if player is safe
     public boolean isSafe() {
         return unoState != UNOState.NotSafe;
     }
 
-    /**
-     * Gets the current UNOState that can be Safe, Called, or NotSafe.
-     *
-     * @return The current UNOState.
-     */
     public UNOState getUnoState() {
         return unoState;
     }

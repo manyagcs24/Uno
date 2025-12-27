@@ -1,30 +1,13 @@
 import java.awt.*;
-
-/**
- * Uno
- *
- * UNOCalledOverlay class:
- * Shows UNO! for a player when they called UNO!
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
+//Shows UNO! for a player when they called UNO!
 public class UNOCalledOverlay extends PlayerFlashOverlay {
-    /**
-     * Sets up the overlay ready to show.
-     *
-     * @param position Position where to place this overlay.
-     */
+    //sets up the overlay ready to show
     public UNOCalledOverlay(Position position) {
         super(position, "UNO!", Color.RED, 40);
         setEnabled(false);
     }
 
-    /**
-     * Draws the UNO! text flashing with showing 75% of the time.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    //draws the UNO! text
     @Override
     public void paint(Graphics g) {
         if(displayTimer % 200 < 150) {

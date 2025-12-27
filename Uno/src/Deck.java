@@ -3,42 +3,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Uno
- *
- * Deck class:
- * Represents a Deck with a collection of cards.
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
+// Represents the draw deck
+
 public class Deck extends Rectangle {
-    /**
-     * The list of cards currently in the deck.
-     */
+    // Cards currently in the deck
     private final List<Card> deck;
-    /**
-     * The variable used to give every card a unique cardID.
-     */
+    
+    // Used to assign unique card IDs
     private int nextCardID;
 
-    /**
-     * Initialises the deck with no cards initially.
-     *
-     * @param position Position for the deck to appear in the game.
-     */
+    // Create an empty deck at a position
     public Deck(Position position) {
         super(position, Card.CARD_WIDTH, Card.CARD_HEIGHT);
         deck = new ArrayList<>();
         nextCardID = 0;
     }
 
-    /**
-     * Draws a the back of a card to represent the deck position.
-     * With the word "DECK" appearing above it.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    // Draw deck back and label
     public void paint(Graphics g) {
         Card.paintCardBack(g, this);
 
@@ -47,12 +28,7 @@ public class Deck extends Rectangle {
         g.drawString("DECK", position.x+width/2-strWidth/2, position.y-4);
     }
 
-    /**
-     * If the deck is empty it is populated with a new deck.
-     * Then a card is removed from the deck and returned.
-     *
-     * @return A single card drawn from the deck.
-     */
+    // Draw a card (refill if empty)
     public Card drawCard() {
         if(deck.isEmpty()) {
             fillDeck();
@@ -62,10 +38,7 @@ public class Deck extends Rectangle {
         return drawnCard;
     }
 
-    /**
-     * Fills the deck by populating the deck with all the different card variations,
-     * and then shuffles the cards to create a random order.
-     */
+    // Create a full UNO deck and shuffle
     private void fillDeck() {
         deck.clear();
         // for each colour
@@ -78,11 +51,13 @@ public class Deck extends Rectangle {
                 deck.add(new Card(faceValue, colourID, nextCardID++));
             }
         }
+
         // Four of each Wild and Draw 4 Wild.
         for(int i = 0; i < 4; i++) {
             deck.add(new Card(13, 4, nextCardID++));
             deck.add(new Card(14, 4, nextCardID++));
         }
+        
         // randomise order
         Collections.shuffle(deck);
     }

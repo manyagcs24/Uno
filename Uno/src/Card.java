@@ -1,55 +1,25 @@
 import java.awt.*;
-
-/**
- * Uno
- *
- * Card class:
- * Defines a Card including its properties and methods for showing appearance of the front and back.
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
+//represents single Uno card
 public class Card extends Rectangle {
-    /**
-     * Constant definition of the width of a card to be used for calculations.
-     */
+
+    //card dimensions
     public static final int CARD_WIDTH = 60;
-    /**
-     * Constant definition of the height of a card to be used for calculations.
-     */
     public static final int CARD_HEIGHT = 90;
 
-    /**
-     * The Strings to show for each different faceValueID.
-     */
-    private static final String[] cardFaceValues = {"0","1","2","3","4","5","6","7","8","9",
-                                    "Draw Two", "Skip", "Reverse", "Draw Four", "Wild"};
+    // Face labels for each card type
+    private static final String[] cardFaceValues = {"0","1","2","3","4","5","6","7","8","9","Draw Two", "Skip", "Reverse", "Draw Four", "Wild"};
 
-    /**
-     * The label in the centre of the card.
-     */
+    // Text shown on the card               
     private final String cardLabel;
-    /**
-     * The label in both corners of the card.
-     */
     private final String cornerLabel;
-    /**
-     * The ID used to determine which of the four colours it is (or 4 if the card is a wild without colour set yet).
-     */
+    
+    // Card properties
     private int colourID;
-    /**
-     * The faceValue to represent what type of number or other visual appearance the card has.
-     */
     private final int faceValueID;
-    /**
-     * The colour used for drawing based on the colourID.
-     */
     private Color drawColour;
-    /**
-     * The unique ID based on order drawn from the deck.
-     */
     private final int cardID;
 
+    // Create a card
     public Card(int faceValueID, int colourID, int cardID) {
         super(new Position(0,0), CARD_WIDTH, CARD_HEIGHT);
         this.faceValueID = faceValueID;
@@ -57,6 +27,8 @@ public class Card extends Rectangle {
         this.colourID = colourID;
         this.drawColour = getColourByID(colourID);
         this.cardID = cardID;
+
+        // Set corner label
         if(faceValueID == 10) {
             this.cornerLabel = "+2";
         } else if(faceValueID == 13) {
@@ -68,11 +40,7 @@ public class Card extends Rectangle {
         }
     }
 
-    /**
-     * Draws the card face up based on properties and type of card.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    // Draw card face
     public void paint(Graphics g) {
         // Draw card background with white border and card colour
         g.setColor(Color.WHITE);
@@ -122,10 +90,7 @@ public class Card extends Rectangle {
         g.drawString(cornerLabel, position.x+width-strWidth-5, position.y+height-5);
     }
 
-    /**
-     * @param g Reference to the Graphics object for rendering.
-     * @param bounds Bounds to use for drawing the card back.
-     */
+    // Draw card back
     public static void paintCardBack(Graphics g, Rectangle bounds) {
         g.setColor(Color.WHITE);
         g.fillRect(bounds.position.x, bounds.position.y, bounds.width, bounds.height);
@@ -144,66 +109,36 @@ public class Card extends Rectangle {
                 bounds.position.y+bounds.height/2-((bounds.width-8)/4)+20);
     }
 
-    /**
-     * Sets the colour and the colour used to draw.
-     *
-     * @param colourID The colour to set the card to. 0=Red, 1=Blue, 2=Green, 3=Yellow, 4=Wild
-     */
+    // Set card colour (used for wild cards)
     public void setColour(int colourID) {
         this.colourID = colourID;
         drawColour = getColourByID(colourID);
     }
 
-    /**
-     * Gets the current colour on the card.
-     *
-     * @return The current colourID of this card.
-     */
     public int getColourID() {
         return colourID;
     }
 
-    /**
-     * Gets the faceValueID of the card.
-     *
-     * @return The current faceValueID of the card.
-     */
     public int getFaceValueID() {
         return faceValueID;
     }
 
-    /**
-     * Gets the unique number that represents only this card.
-     *
-     * @return The unique cardID identifying this card.
-     */
     public int getCardID() {
         return cardID;
     }
 
-    /**
-     * Gets a mapped colour for the colourID or Black.
-     *
-     * @param colourID The colourID to get a Color to draw with.
-     * @return A Color mapped to the colourID. 0=Red, 1=Blue, 2=Green, 3=Yellow, Default=Black.
-     */
+    // Map colour ID to drawing colour
     public static Color getColourByID(int colourID) {
         return switch (colourID) {
-            case 0 -> new Color(191, 48, 48);
-            case 1 -> new Color(36, 94, 160);
-            case 2 -> new Color(115, 187, 54);
-            case 3 -> new Color(238, 188, 65);
-            default -> Color.BLACK;
+            case 0 -> new Color(191, 48, 48);  //red
+            case 1 -> new Color(36, 94, 160);   //blue
+            case 2 -> new Color(115, 187, 54);  //green
+            case 3 -> new Color(238, 188, 65);   //yellow
+            default -> Color.BLACK;  //wild/default
         };
     }
 
-    /**
-     * Gets the score based on the faceValue of the card.
-     * Numbered cards are their face value, wild and +4 are worth 50,
-     * and others are worth 20.
-     *
-     * @return The calculated score for this card.
-     */
+    // Get score value for this card
     public int getScoreValue() {
         if(faceValueID < 10) return faceValueID;
         else if(faceValueID == 13 || faceValueID == 14) return 50;

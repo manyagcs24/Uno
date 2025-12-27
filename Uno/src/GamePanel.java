@@ -3,43 +3,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-/**
- * Uno
- *
- * GamePanel class:
- * Manages the primary game with passing off actions from the mouse, keys, and
- * any timer events to the different parts of the game.
- *
- * @author Peter Mitchell
- * @version 2021.1
- */
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
-    /**
-     * Height of the panel.
-     */
-    public static final int PANEL_HEIGHT = 720;
-    /**
-     * Width of the panel.
-     */
-    public static final int PANEL_WIDTH = 1280;
+    public static final int PANEL_HEIGHT = 720; // panel height
+    public static final int PANEL_WIDTH = 1280; // panel width
 
-    /**
-     * Reference to the window that appears when the game is paused.
-     */
-    private final PauseInterface pauseWnd;
-    /**
-     * Reference to the active interface.
-     */
-    private WndInterface activeInterface;
-    /**
-     * When debug mode is enabled. Additional output and controls are enabled.
-     */
-    public static boolean DEBUG_MODE;
+    private final PauseInterface pauseWnd; // pause menu
+    private WndInterface activeInterface; // current interface
+    public static boolean DEBUG_MODE; // debug flag
 
-    /**
-     * Configures the game ready to be played including selection of playing against either
-     * AI or another player.
-     */
+    // constructor, sets up panel and starts timer
     public GamePanel() {
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(new Color(93, 141, 74));
@@ -47,9 +19,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         pauseWnd = new PauseInterface(new Rectangle(PANEL_WIDTH/2-100,PANEL_HEIGHT/2-100,200,200), this);
         pauseWnd.setEnabled(false);
 
-        showLobby();
+        showLobby(); // start with lobby
 
-        Timer updateTimer = new Timer(20, this);
+        Timer updateTimer = new Timer(20, this); // 50 FPS update
         updateTimer.start();
 
         addMouseListener(this);
@@ -57,10 +29,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         DEBUG_MODE = false;
     }
 
-    /**
-     * Sets the currently active interface to the lobby removing any existing interface.
-     * If this is triggered from the pause interface it just resumes the current interface.
-     */
+    // show lobby interface
     public void showLobby() {
         if(!(activeInterface instanceof LobbyInterface)) {
             activeInterface = new LobbyInterface(new Rectangle(0, 0, PANEL_WIDTH, PANEL_HEIGHT), this);
@@ -68,52 +37,29 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         setPauseState(false);
     }
 
-    /**
-     * Sets the currently active interface to the post-game interface after a game has ended.
-     *
-     * @param playerList List of players who were playing in the round.
-     * @param ruleSet Rules applied during the round.
-     */
+    // show post-game interface
     public void showPostGame(List<Player> playerList, RuleSet ruleSet) {
         activeInterface = new PostGameInterface(new Rectangle(0,0,PANEL_WIDTH, PANEL_HEIGHT),
                                                 playerList, ruleSet, this);
     }
 
-    /**
-     * Creates a new game with the specified list of players. Use this for coming from the lobby.
-     *
-     * @param playerList The player list to start a game with.
-     * @param ruleSet Definition of how the game is to be played.
-     */
+    // start a new game from lobby
     public void startGame(List<LobbyPlayer> playerList, RuleSet ruleSet) {
         activeInterface = new CurrentGameInterface(new Rectangle(0,0,PANEL_WIDTH,PANEL_HEIGHT),
                                                     ruleSet, playerList, this);
     }
 
-    /**
-     * Creates a new game with the specified list of players. Use this for coming from post-game.
-     *
-     * @param playerList The player list to start a new round with.
-     * @param ruleSet Definition of how the game is to be played.
-     */
+    // start next round
     public void startNextRound(List<Player> playerList, RuleSet ruleSet) {
         activeInterface = new CurrentGameInterface(new Rectangle(0,0,PANEL_WIDTH,PANEL_HEIGHT),
                 playerList, ruleSet, this);
     }
 
-    /**
-     * Draws the game grid and draws the message at the bottom showing a string representing the game state.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     */
+    // draw panel
     public void paint(Graphics g) {
         super.paint(g);
-        if(activeInterface != null) {
-            activeInterface.paint(g);
-        }
-        if(pauseWnd.isEnabled()) {
-            pauseWnd.paint(g);
-        }
+        if(activeInterface != null) activeInterface.paint(g);
+        if(pauseWnd.isEnabled()) pauseWnd.paint(g);
         if(DEBUG_MODE) {
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -121,139 +67,68 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-    /**
-     * Pauses or unpauses the game.
-     *
-     * @param isPaused When true the game is paused and pause window is shown.
-     */
+    // pause/unpause game
     public void setPauseState(boolean isPaused) {
-        if(activeInterface != null) {
-            activeInterface.setEnabled(!isPaused);
-        }
+        if(activeInterface != null) activeInterface.setEnabled(!isPaused);
         pauseWnd.setEnabled(isPaused);
     }
 
-    /**
-     * Quits the game immediately.
-     */
+    // quit game
     public void quitGame() {
         System.exit(0);
     }
 
-    /**
-     * Handles the key input to have Escape open the pause menu.
-     *
-     * @param keyCode The key that was pressed.
-     */
+    // handle key input
     public void handleInput(int keyCode) {
-        if(keyCode == KeyEvent.VK_ESCAPE) {
-            setPauseState(!pauseWnd.isEnabled());
-        } else if(keyCode == KeyEvent.VK_0) {
-            DEBUG_MODE = !DEBUG_MODE;
-        } else {
-            activeInterface.handleInput(keyCode);
-        }
+        if(keyCode == KeyEvent.VK_ESCAPE) setPauseState(!pauseWnd.isEnabled());
+        else if(keyCode == KeyEvent.VK_0) DEBUG_MODE = !DEBUG_MODE;
+        else activeInterface.handleInput(keyCode);
         repaint();
     }
 
-    /**
-     * Passes the mouse event on to all the windows.
-     *
-     * @param e Information about the mouse event.
-     */
+    // handle mouse press
     @Override
     public void mousePressed(MouseEvent e) {
         Position mousePosition = new Position(e.getX(), e.getY());
         pauseWnd.handleMousePress(mousePosition, e.getButton() == 1);
-        if(activeInterface != null) {
-            activeInterface.handleMousePress(mousePosition, e.getButton() == 1);
-        }
+        if(activeInterface != null) activeInterface.handleMousePress(mousePosition, e.getButton() == 1);
         repaint();
     }
 
-    /**
-     * Draws a title with UNO! and text below for credits.
-     *
-     * @param g Reference to the Graphics object for rendering.
-     * @param bounds Bounds of the game area.
-     */
+    // draw UNO title
     public void paintUnoTitle(Graphics g, Rectangle bounds) {
         g.setFont(new Font("Arial", Font.BOLD, 40));
         g.drawString("UNO!", bounds.width/2-40, 50);
         g.setFont(new Font("Arial", Font.BOLD, 10));
-        g.drawString("Developed by Peter Mitchell (2021)", bounds.width/2-70, 65);
+        g.drawString("Developed by BMSCE", bounds.width/2-70, 65);
+
         g.setFont(new Font("Arial", Font.BOLD, 40));
-        g.setColor(Card.getColourByID(0));
-        g.drawString("U", bounds.width/2-40+2, 48);
-        g.setColor(Card.getColourByID(1));
-        g.drawString("N", bounds.width/2-40+2+30, 48);
-        g.setColor(Card.getColourByID(2));
-        g.drawString("O", bounds.width/2-40+2+60, 48);
-        g.setColor(Card.getColourByID(3));
-        g.drawString("!", bounds.width/2-40+2+90, 48);
+        g.setColor(Card.getColourByID(0)); g.drawString("U", bounds.width/2-40+2, 48);
+        g.setColor(Card.getColourByID(1)); g.drawString("N", bounds.width/2-40+32, 48);
+        g.setColor(Card.getColourByID(2)); g.drawString("O", bounds.width/2-40+62, 48);
+        g.setColor(Card.getColourByID(3)); g.drawString("!", bounds.width/2-40+92, 48);
     }
 
-    /**
-     * Passes the mouse event on to all the windows.
-     *
-     * @param e Information about the mouse event.
-     */
+    // handle mouse movement
     @Override
     public void mouseMoved(MouseEvent e) {
         Position mousePosition = new Position(e.getX(), e.getY());
         pauseWnd.handleMouseMove(mousePosition);
-        if(activeInterface != null) {
-            activeInterface.handleMouseMove(mousePosition);
-        }
+        if(activeInterface != null) activeInterface.handleMouseMove(mousePosition);
         repaint();
     }
 
-    /**
-     * Forces the active game to update and forces a repaint.
-     *
-     * @param e Information about the event.
-     */
+    // update game timer
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(activeInterface != null) {
-            activeInterface.update(20);
-        }
+        if(activeInterface != null) activeInterface.update(20);
         repaint();
     }
 
-    /**
-     * Not set.
-     *
-     * @param e Not set.
-     */
-    @Override
-    public void mouseClicked(MouseEvent e) {}
-    /**
-     * Not set.
-     *
-     * @param e Not set.
-     */
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-    /**
-     * Not set.
-     *
-     * @param e Not set.
-     */
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-    /**
-     * Not set.
-     *
-     * @param e Not set.
-     */
-    @Override
-    public void mouseExited(MouseEvent e) {}
-    /**
-     * Not set.
-     *
-     * @param e Not set.
-     */
-    @Override
-    public void mouseDragged(MouseEvent e) {}
+    // unused mouse events
+    @Override public void mouseClicked(MouseEvent e) {}
+    @Override public void mouseReleased(MouseEvent e) {}
+    @Override public void mouseEntered(MouseEvent e) {}
+    @Override public void mouseExited(MouseEvent e) {}
+    @Override public void mouseDragged(MouseEvent e) {}
 }
